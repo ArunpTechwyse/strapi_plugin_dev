@@ -98,20 +98,24 @@ const HomePage = () => {
   };
   
   
-
-  const handleDelete = async (id) => {
-    try {
-      setIsLoading(true);
-      await axios.delete(`http://localhost:1337/form/delete/${id}`);
-      setSuccessMessage('Form deleted successfully!');
-      fetchData(); // Re-fetch data to reflect changes
-    } catch (err) {
-      setError('Failed to delete form');
-      console.error("Error:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const handleDeleteSubmit = async (id) => {
+  try {
+    setIsLoading(true); // Set loading state to true before the deletion process
+    // Construct the URL with the id of the form to be deleted
+    const url = `http://localhost:1337/form/delete/${id}`;
+    await axios.delete(url);
+    // Optionally, reset form fields if needed
+    // setFormData({ name: '', email: '', phone: '', message: '' });
+    setSuccessMessage('Form deleted successfully!');
+    // Re-fetch data to reflect the deletion
+    fetchData();
+  } catch (err) {
+    setError('Failed to delete form');
+    console.error("Error:", err);
+  } finally {
+    setIsLoading(false); // Set loading state to false after the operation is completed
+  }
+};
 
   return (
     <div style={{ display: 'flex' }}>
@@ -235,6 +239,23 @@ const HomePage = () => {
             <button type="submit">Update</button>
           </form>
         )}
+
+
+{action === 'DELETE' && (
+  <div>
+    <h3>Delete Form</h3>
+    <p>Are you sure you want to delete this form?</p>
+    <input
+              type="number"
+              placeholder="Id"
+              value={formData.id}
+              onChange={(e) => setFormData({...formData, id: e.target.value })}
+            />
+    <button onClick={() => handleDeleteSubmit(formData.id)}>Delete</button>
+  </div>
+)}
+
+
 
         {/* {action === 'UPDATE' && selectedForm && (
           <form onSubmit={handleUpdateSubmit}>
