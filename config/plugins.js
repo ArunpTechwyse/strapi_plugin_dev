@@ -4,5 +4,10 @@ module.exports = {
       enabled: true,
       resolve: './src/plugins/form'
     },
+
+    'product': {
+      enabled: true,
+      resolve: './src/plugins/product'
+    },
     // ...
   }
